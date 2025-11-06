@@ -118,50 +118,45 @@ def get_underperforming_trucks(df: pd.DataFrame, threshold_percentile: int = 25)
 # ==================== PROFIT OPTIMIZATION METRICS ====================
 
 def get_transaction_velocity_by_truck(df: pd.DataFrame) -> pd.DataFrame:
-    """ Calculate transactions per hour by truck to identify efficiency opportunities. """
+    """ Calculate average revenue per hour by truck to identify efficiency opportunities. """
 
     df_copy = df.copy()
     df_copy['hour'] = df_copy['at'].dt.hour
 
     velocity = df_copy.groupby(['truck_name', 'hour']).agg({
-        'transaction_id': 'count',
-        'total_pounds': 'sum'
+        'total_pounds': 'sum'  # Revenue per hour per truck
     }).reset_index()
 
-    # Calculate average velocity per truck
+    # Calculate average revenue per hour per truck
     avg_velocity = velocity.groupby('truck_name').agg({
-        'transaction_id': 'mean',
         'total_pounds': 'mean'
     }).reset_index()
 
     avg_velocity = avg_velocity.rename(columns={
-        'transaction_id': 'avg_transactions_per_hour',
         'total_pounds': 'avg_revenue_per_hour'
     })
-
-    avg_velocity['revenue_per_transaction'] = (
-        avg_velocity['avg_revenue_per_hour'] /
-        avg_velocity['avg_transactions_per_hour']
-    )
 
     return avg_velocity.sort_values('avg_revenue_per_hour', ascending=False)
 
 
 # ==================== DEMAND ANALYSIS METRICS ====================
 
+def categorize_price(price):
+    """ Categorize price into segments """
+
+    if price <= 5.0:
+        return 'Low (£0-5)'
+    elif price <= 10.0:
+        return 'Medium (£5-10)'
+    else:
+        return 'High (£10+)'
+
+
 def get_price_point_segmentation(df: pd.DataFrame) -> pd.DataFrame:
     """ Segment transactions by price point to understand demand at different price levels.
     Low: £0-5, Medium: £5-10, High: £10+ """
 
     df_copy = df.copy()
-
-    def categorize_price(price):
-        if price <= 5.0:
-            return 'Low (£0-5)'
-        elif price <= 10.0:
-            return 'Medium (£5-10)'
-        else:
-            return 'High (£10+)'
 
     df_copy['price_segment'] = df_copy['total_pounds'].apply(categorize_price)
 
@@ -391,15 +386,10 @@ def lambda_handler(event, context):
         # Generate the HTML report
         html_report = generate_html_report(df)
 
-        # Save to file with yesterday's date (Lambda only allows writing to /tmp/)
         yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
         report_filename = f"t3_daily_report_{yesterday}.html"
-        report_path = os.path.join('/tmp', report_filename)
 
-        with open(report_path, 'w', encoding='utf-8') as f:
-            f.write(html_report)
-
-        print(f"Report generated and saved to: {report_path}")
+        print(f"Report generated successfully: {report_filename}")
 
         return {
             'statusCode': 200,
@@ -423,6 +413,16 @@ if __name__ == "__main__":
     result = lambda_handler(None, None)
     if result['statusCode'] == 200:
         print(f"\n✅ {result['message']}")
+
+        # Save to file for local testing
+        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+        report_filename = f"t3_daily_report_{yesterday}.html"
+        report_path = "./" + report_filename
+
+        with open(report_path, 'w', encoding='utf-8') as f:
+            f.write(result['body'])
+
+        print(f"Report saved to: {report_path}")
         print("You can now open the HTML file in your browser!")
     else:
         print(f"\n❌ Local test failed: {result['body']}")
