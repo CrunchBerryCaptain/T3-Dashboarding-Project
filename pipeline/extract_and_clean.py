@@ -1,3 +1,5 @@
+# pylint: disable=invalid-name
+
 """ Extract script to download data from the RDS database 
 and save each table to its own csv file. """
 

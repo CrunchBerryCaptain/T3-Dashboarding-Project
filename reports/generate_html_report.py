@@ -1,3 +1,5 @@
+# pylint: disable=invalid-name
+
 import os
 import pandas as pd
 import awswrangler as wr
@@ -194,7 +196,8 @@ def generate_html_report(df: pd.DataFrame) -> str:
 
     underperformers = get_underperforming_trucks(df)
     velocity = get_transaction_velocity_by_truck(df)
-    dominant_segment = price_seg.loc[price_seg['percentage_of_revenue'].idxmax()]
+    dominant_segment = price_seg.loc[price_seg['percentage_of_revenue'].idxmax(
+    )]
 
     # Email-compatible HTML with inline styles and table layouts
     html = f"""

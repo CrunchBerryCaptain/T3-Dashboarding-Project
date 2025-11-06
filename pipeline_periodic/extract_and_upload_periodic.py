@@ -1,3 +1,5 @@
+# pylint: disable=invalid-name
+
 """ Python script for AWS Lambda to extract new data from RDS using
 Parameter Store, process it, upload to S3, and update Parameter Store. 
 To keep track of which transactions have already been processed. """
