@@ -39,7 +39,7 @@ The T3 Dashboard and Reporting Project provides real-time analytics and automate
 ### Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/CrunchBerryCaptain/t3-dashboard-and-reporting-project
 cd "T3 Dashboard and Reporting Project"
 ```
 
