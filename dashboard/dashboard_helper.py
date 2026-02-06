@@ -1,5 +1,3 @@
-# pylint: skip-file
-
 """ Helper functions for the Streamlit dashboard """
 
 import awswrangler as wr

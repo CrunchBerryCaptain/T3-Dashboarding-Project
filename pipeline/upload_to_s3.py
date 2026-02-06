@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 """ Upload script that uses AWS Wrangler to upload 
 CSV data to time-partitioned S3 buckets in Parquet format. """
 

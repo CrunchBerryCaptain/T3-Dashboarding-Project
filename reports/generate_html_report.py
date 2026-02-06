@@ -1,12 +1,9 @@
-# pylint: disable=invalid-name, line-too-long, unused-argument
-
 """
 AWS Lambda function for generating daily business intelligence reports
 for T3 Food Truck operations. Queries Athena for yesterday's data and
 generates comprehensive HTML reports with performance metrics.
 """
 
-import os
 from datetime import datetime, timedelta
 import pandas as pd
 import awswrangler as wr

@@ -72,7 +72,7 @@ ECR_URL_REPORT_LAMBDA=<ecr-lambda-repository-url>
 ```bash
 cd dashboard
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -213,5 +213,3 @@ T3 Dashboard and Reporting Project/
 Built with modern cloud technologies and data engineering best practices. Special thanks to the AWS ecosystem for providing scalable, cost-effective infrastructure components.
 
 ---
-
-**Live Dashboard**: `http://18.130.208.234:8501/` (when deployed)
