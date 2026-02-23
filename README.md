@@ -159,7 +159,6 @@ T3 Dashboard and Reporting Project/
 ├── preliminary_analysis/           # Initial data insights
 │   └── t3_recommendations.md       # Business recommendations
 │
-├── CLAUDE.md                       # AI assistant guidance
 └── README.md                       # This file
 ```
 
